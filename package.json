@@ -1,0 +1,12 @@
+{
+  "name": "nortek-ad2cp-parser",
+  "description": "Parse Nortek AD2CP files in JavaScript",
+  "type": "module",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "packageManager": "pnpm@10.17.1",
+  "dependencies": {
+    "binary-parser": "^2.3.0",
+    "dayjs": "^1.11.20"
+  }
+}
