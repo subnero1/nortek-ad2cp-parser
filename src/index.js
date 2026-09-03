@@ -183,7 +183,7 @@ const df3CurrentProfileData = new Parser()
   .seek(2)
   .wrapped({
     length: 2,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit1("hasSpectrumData")
       .bit1("hasStandardDeviationData")
@@ -232,7 +232,7 @@ const df3CurrentProfileData = new Parser()
   .seek(-4)
   .wrapped("status", {
     length: 4,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit4("wakeUpState")
       .bit3("orientation")
@@ -324,7 +324,7 @@ const echosounderRawData = new Parser()
   .nest("errorStatus", errorStatus)
   .wrapped("status", {
     length: 4,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit4("wakeUpState")
       .bit3("orientation")
@@ -399,7 +399,7 @@ const df3VelocityData = new Parser()
   .seek(30)
   .wrapped({
     length: 2,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit4("numberOfBeams")
       .bit2("coordinateSystem")
@@ -572,7 +572,7 @@ const df3SpectrumData = new Parser()
   .seek(30)
   .wrapped({
     length: 2,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser().bit3("numberOfBeams").bit13("numberOfBins"),
   })
   .saveOffset("__current__")
@@ -610,7 +610,7 @@ const df7CurrentProfileData = new Parser()
   .uint16le("offsetOfData")
   .wrapped({
     length: 4,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit16("__skip2__")
       .bit4("totalNumberOfBeams")
@@ -624,7 +624,7 @@ const df7CurrentProfileData = new Parser()
   })
   .wrapped({
     length: 4,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit23("__skip3__")
       .bit1("stmIncluded")
@@ -639,7 +639,7 @@ const df7CurrentProfileData = new Parser()
   })
   .wrapped({
     length: 8,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit26("__skip4__")
       .bit1("stmValuesValid")
@@ -732,7 +732,7 @@ const df7CurrentProfileData = new Parser()
   .uint16le("__skip5__")
   .wrapped("status", {
     length: 4,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit1("isAverageData")
       .bit1("activeConfiguration")
@@ -856,7 +856,7 @@ const waveData = new Parser()
   .uint8("offsetOfData")
   .wrapped({
     length: 2,
-    wrapper: (buffer) => buffer.reverse(),
+    wrapper: (buffer) => Buffer.from(buffer).reverse(),
     type: new Parser()
       .bit11("__skip__")
       .bit1("hasWaveDirectionSpectra")

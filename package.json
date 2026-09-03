@@ -4,6 +4,9 @@
   "type": "module",
   "main": "./src/index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "packageManager": "pnpm@10.17.1",
   "dependencies": {
     "binary-parser": "^2.3.0",
