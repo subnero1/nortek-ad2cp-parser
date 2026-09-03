@@ -1,5 +1,11 @@
 import { Parser } from "binary-parser";
 import dayjs from "dayjs";
+import objectSupport from "dayjs/plugin/objectSupport.js";
+
+// The dateTime formatter builds a dayjs from an object ({ year, month, ... }),
+// which requires the objectSupport plugin. Without it, every date is parsed as
+// "Invalid Date".
+dayjs.extend(objectSupport);
 
 export { parseAd2cp, toNmea };
 
@@ -1125,17 +1131,23 @@ function toNmea(data, types) {
               record.statusFlags.toString(16).toUpperCase().padStart(8, "0"),
             (tag ? "BV=" : "") + record.batteryVoltage.toFixed(1),
             (tag ? "SS=" : "") + record.speedOfSound.toFixed(1),
+            // Standard deviation data (HSD/PISD/RSD/PSD) is optional: records
+            // with hasStandardDeviationData == 0 have an empty
+            // standardDeviationData object. These fields are only emitted in
+            // PNORS1/PNORS2 (the base PNORS filters them out below), so emit an
+            // empty value when absent rather than crashing.
             (tag ? "HSD=" : "") +
-              record.standardDeviationData.heading.toFixed(2),
+              (record.standardDeviationData.heading?.toFixed(2) ?? ""),
             (tag ? "H=" : "") + record.heading.toFixed(1),
             (tag ? "PI=" : "") + record.pitch.toFixed(1),
             (tag ? "PISD=" : "") +
-              record.standardDeviationData.pitch.toFixed(2),
+              (record.standardDeviationData.pitch?.toFixed(2) ?? ""),
             (tag ? "R=" : "") + record.roll.toFixed(1),
-            (tag ? "RSD=" : "") + record.standardDeviationData.roll.toFixed(2),
+            (tag ? "RSD=" : "") +
+              (record.standardDeviationData.roll?.toFixed(2) ?? ""),
             (tag ? "P=" : "") + record.pressure.toFixed(3),
             (tag ? "PSD=" : "") +
-              record.standardDeviationData.pressure.toFixed(2),
+              (record.standardDeviationData.pressure?.toFixed(2) ?? ""),
             (tag ? "T=" : "") + record.temperature.toFixed(2),
           ];
           if (type === "PNORS") {
