@@ -414,20 +414,14 @@ const df3VelocityData = new Parser()
   .seek(function () {
     return this["dataStart"] + this["offsetOfData"] - this["__current__"];
   })
-  .choice({
-    // Undocumented. This seems to work for the listed record types...
-    tag: "dataSeriesId",
-    choices: {
-      0x16: new Parser(),
-      0x18: new Parser(),
-      0x15: new Parser()
-        .floatle("stmDataScattering")
-        .floatle("stmDataHighRange"),
-      0x1a: new Parser()
-        .floatle("stmDataScattering")
-        .floatle("stmDataHighRange"),
-    },
-  })
+  // STM data section. Per the Nortek Integrator's Guide ("DF3 VelocityData",
+  // IDs 0x15, 0x16, 0x18, 0x1e, 0x1a, 0x1f), the velocity data starts after
+  // an STM section holding the Scattering and HighRange floats. This section
+  // is present for all of these record types, so it is read unconditionally.
+  // (STM_LEN is 8 bytes here; instruments emitting the additional reserved
+  // floats would need this extended.)
+  .floatle("stmDataScattering")
+  .floatle("stmDataHighRange")
   .array("velocityData", {
     type: new Parser().int16le(),
     length: function () {
